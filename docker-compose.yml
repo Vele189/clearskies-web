@@ -1,0 +1,17 @@
+# The frontend on its own. The API it talks to is not here: run the monorepo's
+# `make stack`, or point VITE_API_BASE_URL at a deployed one.
+services:
+  web:
+    build:
+      context: .
+      args:
+        # Build args and not environment: Vite inlines these when the image is
+        # built, so changing one means `docker compose build web`, not a
+        # restart. The browser resolves this URL, so it is the API as published
+        # on the host, not a name on the compose network.
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+        VITE_TILES_URL: ${VITE_TILES_URL:-}
+        VITE_BASEMAP_STYLE: ${VITE_BASEMAP_STYLE:-https://tiles.openfreemap.org/styles/positron}
+        VITE_GEOCODER_URL: ${VITE_GEOCODER_URL:-}
+    ports:
+      - "${WEB_PORT:-8080}:8080"

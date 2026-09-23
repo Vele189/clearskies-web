@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Named rather than `*.local`, which would also hide any source file that
+# happened to end that way.
+.env
+.env.local
+.env.*.local
+
+# The tile archive is served from R2 and copied here only for local work.
+public/*.pmtiles
+
+.DS_Store
+.idea/
+.vscode/
