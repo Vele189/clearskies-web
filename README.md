@@ -17,6 +17,15 @@ build here cannot be triggered by a change to the API or the pipeline.
 
 ## Running it
 
+The quick way, with Docker, after the API's `./start.sh`:
+
+```
+./start.sh          # builds and serves on :8080
+./start.sh down     # stops it
+```
+
+For development with hot reload:
+
 ```
 npm ci
 cp .env.example .env     # at least VITE_API_BASE_URL
