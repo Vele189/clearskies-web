@@ -49,6 +49,33 @@ a deep link to `/hex/8844c0b18bfffff` from being a 404, and it caches the
 hashed assets forever while refusing to cache `index.html` — a cached shell
 pins the browser to the previous build's asset names.
 
+## Deploying to Railway
+
+`railway.json` tells Railway to build the Dockerfile and to wait for `/` to
+answer before switching traffic. Railway hands a service's variables to a
+Dockerfile build as build args, so the `VITE_` variables below reach Vite
+through the `ARG`s the Dockerfile already declares.
+
+1. New service from this repository, named `web`. Variables:
+
+   ```
+   VITE_API_BASE_URL=https://${{api.RAILWAY_PUBLIC_DOMAIN}}
+   VITE_TILES_URL=https://<your R2 bucket>/clearskies-la.pmtiles
+   VITE_BASEMAP_STYLE=https://tiles.openfreemap.org/styles/positron
+   VITE_GEOCODER_URL=          # empty keeps search local
+   ```
+
+   A Railway build without `VITE_API_BASE_URL` fails on purpose rather than
+   shipping a bundle that calls `localhost`.
+2. Generate a public domain under Settings > Networking. The CDN under
+   Settings > Edge is safe to turn on here: every asset name is hashed and
+   `index.html` is served `no-cache`.
+3. Put that domain in the API's `CORS_ORIGINS`, and in the R2 bucket's CORS
+   policy, or the browser blocks the responses.
+
+A changed `VITE_` variable needs a redeploy, not a restart: the value is in
+the bundle.
+
 ## What CI here does and does not do
 
 It lints, typechecks, tests, builds, and builds the image and asks it for a
