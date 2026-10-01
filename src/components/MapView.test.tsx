@@ -97,6 +97,7 @@ vi.mock("maplibre-gl", () => ({
   ScaleControl: vi.fn(),
   addProtocol: vi.fn(),
   removeProtocol: vi.fn(),
+  setWorkerUrl: vi.fn(),
 }));
 
 vi.mock("pmtiles", () => ({
