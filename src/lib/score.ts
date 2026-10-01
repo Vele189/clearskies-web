@@ -89,7 +89,7 @@ export function confidenceTerms(confidence: Confidence): ConfidenceTerm[] {
       label: "Indicator coverage",
       weight: 0.35,
       value: confidence.coverage,
-      meaning: "How many of the fifteen indicators had a value here",
+      meaning: "How many of the eighteen indicators had a value here",
     },
     {
       id: "recency",
