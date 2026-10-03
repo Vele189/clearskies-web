@@ -37,6 +37,14 @@ const DEFAULT_BASEMAP = "https://tiles.openfreemap.org/styles/positron";
 const CENTER: [number, number] = [-91.5, 30.6];
 const ZOOM = 6.6;
 
+// Below this zoom the tile archive has no hexes (it is built from z6), so a
+// reader who zooms out sees an empty map with nothing saying where the scores
+// are. A marker of fixed screen size takes over below it and points back.
+const COVERAGE_MAX_ZOOM = 6;
+const COVERAGE_SOURCE_ID = "clearskies-coverage";
+const COVERAGE_CIRCLE_ID = "clearskies-coverage-circle";
+const COVERAGE_LABEL_ID = "clearskies-coverage-label";
+
 const SOURCE_ID = "clearskies-hexes";
 const FILL_LAYER_ID = "clearskies-hex-fill";
 const HATCH_LAYER_ID = "clearskies-hex-hatch";
@@ -136,6 +144,49 @@ export default function MapView({ onSelect }: Props) {
     map.on("load", () => {
       setReady(true);
       setFatal(null);
+
+      // Added before the tiles check so the pointer shows even with no archive.
+      // Its radius is in pixels, so it stays the same size however far out the
+      // reader zooms, and it disappears once the hexes themselves draw.
+      map.addSource(COVERAGE_SOURCE_ID, {
+        type: "geojson",
+        data: { type: "Feature", geometry: { type: "Point", coordinates: CENTER }, properties: {} },
+      });
+      map.addLayer({
+        id: COVERAGE_CIRCLE_ID,
+        type: "circle",
+        source: COVERAGE_SOURCE_ID,
+        maxzoom: COVERAGE_MAX_ZOOM,
+        paint: {
+          "circle-radius": 26,
+          "circle-color": "rgba(30, 41, 59, 0.12)",
+          "circle-stroke-color": "#1e293b",
+          "circle-stroke-width": 2,
+        },
+      });
+      map.addLayer({
+        id: COVERAGE_LABEL_ID,
+        type: "symbol",
+        source: COVERAGE_SOURCE_ID,
+        maxzoom: COVERAGE_MAX_ZOOM,
+        layout: {
+          "text-field": "Louisiana · scored here",
+          "text-font": ["Noto Sans Bold"],
+          "text-size": 13,
+          "text-offset": [0, 2.6],
+          "text-anchor": "top",
+        },
+        paint: { "text-color": "#1e293b", "text-halo-color": "#ffffff", "text-halo-width": 1.5 },
+      });
+      map.on("click", COVERAGE_CIRCLE_ID, () => {
+        map.flyTo({ center: CENTER, zoom: ZOOM, essential: true });
+      });
+      map.on("mouseenter", COVERAGE_CIRCLE_ID, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", COVERAGE_CIRCLE_ID, () => {
+        map.getCanvas().style.cursor = "";
+      });
 
       if (!tilesUrl) return; // No archive to point at until CS-207.
 
