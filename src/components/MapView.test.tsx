@@ -154,6 +154,17 @@ describe("MapView", () => {
     expect(screen.getByRole("region", { name: "Burden score map" })).toBeInTheDocument();
   });
 
+  it("points back to Louisiana when zoomed out past the hexes", () => {
+    // The archive has no hexes below z6, so a marker takes over there and a
+    // click on it returns the reader to the state.
+    const { map } = loadedMap();
+    expect(map.getLayer("clearskies-coverage-circle")).toBeDefined();
+    expect(map.getLayer("clearskies-coverage-label")).toBeDefined();
+
+    map.fire("click", {}, "clearskies-coverage-circle");
+    expect(map.flights).toEqual([{ center: [-91.5, 30.6], zoom: 6.6, essential: true }]);
+  });
+
   it("selects the hexagon a reader clicks", () => {
     const { map, onSelect } = loadedMap();
     map.fire("click", { features: [{ properties: { h3: "88444600ddfffff" } }] }, "clearskies-hex-fill");
