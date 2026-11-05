@@ -63,7 +63,7 @@ export default function HexPage({ h3 }: { h3: string }) {
         {/* The place, once it is known, rather than the raw H3 index. The index
             stays as a small reference: it is what identifies this exact area,
             and the thing to quote when asking about it. */}
-        <h1 className="mt-1.5 text-2xl font-semibold sm:text-3xl">
+        <h1 className="mt-1.5 text-2xl font-black sm:text-3xl">
           {hex ? placeName(hex) : "An area in Louisiana"}
         </h1>
         <p className="mt-1 text-xs text-faint">

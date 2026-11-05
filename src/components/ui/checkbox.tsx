@@ -14,7 +14,7 @@ function Checkbox({
       className={cn(
         // The unchecked border identifies the control, so it is held to 3:1
         // rather than drawn as a hairline.
-        "peer size-4 shrink-0 rounded-sm border border-input bg-card transition-colors",
+        "peer size-4 shrink-0 rounded-none border border-input bg-card transition-colors",
         "data-[state=checked]:border-primary data-[state=checked]:bg-primary",
         "data-[state=checked]:text-primary-foreground disabled:opacity-50",
         className,

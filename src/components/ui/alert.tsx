@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils.ts";
  *  notice that can be closed is one that was closed before it was read.
  */
 const alertVariants = cva(
-  "grid w-full grid-cols-[auto_1fr] items-start gap-x-3 gap-y-1 rounded-lg border px-4 py-3 " +
+  "grid w-full grid-cols-[auto_1fr] items-start gap-x-3 gap-y-1 rounded-none border px-4 py-3 " +
     "text-sm [&>svg]:mt-0.5 [&>svg]:size-4",
   {
     variants: {
@@ -43,7 +43,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="alert-title"
-      className={cn("col-start-2 font-semibold tracking-tight", className)}
+      className={cn("col-start-2 ui-label", className)}
       {...props}
     />
   );

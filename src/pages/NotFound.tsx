@@ -16,7 +16,7 @@ export default function NotFound({ path }: { path: string }) {
       <p className="text-xs font-semibold tracking-[0.06em] text-faint uppercase">
         No such page
       </p>
-      <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Nothing at this address</h1>
+      <h1 className="mt-2 text-3xl font-black sm:text-4xl">Nothing at this address</h1>
       <p className="measure mt-4 font-serif text-[1.0625rem] leading-[1.7] text-body">
         There is no page at <Mono className="text-muted-foreground">{path}</Mono>.
       </p>

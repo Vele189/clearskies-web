@@ -1,15 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Self-hosted rather than pulled from a font CDN.
+/* Fonts: never from a third-party CDN.
  *
  * A tool built for people living next to refineries should not announce every
- * one of its readers to a third party in order to render its headings, and a
- * face served from our own origin still renders where the CDN is blocked,
- * throttled or down. The variable files are one request each for the whole
- * weight range, so the privacy position costs nothing in bytes. */
-@import "@fontsource-variable/libre-franklin";
-@import "@fontsource-variable/source-serif-4";
+ * one of its readers to a third party in order to render its headings. The
+ * interface follows DESIGN.md (Dell 1996): Arial Black, Helvetica and Times are
+ * operating-system faces, so they cost no request at all. Only the monospace,
+ * which has no dependable system equivalent, is still self-hosted. */
 @import "@fontsource-variable/jetbrains-mono";
 
 @import "maplibre-gl/dist/maplibre-gl.css";
@@ -19,12 +17,23 @@
  *
  * Two rules govern everything below.
  *
- * **Every colour is an alias onto a Tailwind palette entry, never a raw hex.**
+ * **Every semantic colour is an alias onto a palette entry, never a raw hex.**
  * `src/contrast.test.ts` resolves these aliases against the palette Tailwind
- * actually ships and asserts WCAG AA on each pair the UI renders. A literal
- * value here would be a colour the contrast suite cannot see, which is how a
- * redesign quietly drops below 4.5:1. The alias syntax is load-bearing: the
- * parser in `lib/contrast.ts` reads exactly `--color-x: var(--color-y-NNN)`.
+ * ships *plus* the catalog palette declared below, and asserts WCAG AA on each
+ * pair the UI renders. A literal value in a semantic token would be a colour
+ * the contrast suite cannot see, which is how a redesign quietly drops below
+ * 4.5:1. The syntax is load-bearing: the parser in `lib/contrast.ts` reads
+ * exactly `--color-x: var(--color-y-NNN)` for aliases and
+ * `--color-name-NNN: oklch(L% C H)` for palette entries.
+ *
+ * The look is DESIGN.md's (Dell, 1996): a black page frame, flat catalog-tint
+ * colour blocks, 1px black hairlines, square corners, hard shadows, Helvetica
+ * Bold caps for the interface and Times for reading. Two of its colours are
+ * deliberately held back: Dell red and sticker yellow sit inside the map's
+ * yellow-to-dark-red ramp, so neither appears on or beside the map. Red is the
+ * destructive colour only. Yellow marks the current page on the black banner
+ * and fills the warning surface, which is always a black-bordered text notice
+ * and never an area fill, so it cannot be read as a ramp class.
  *
  * **There is no dark theme, and that is a decision rather than a gap.**
  * `docs/frontend.md` section 4 requires every legend swatch to be blended
@@ -36,79 +45,114 @@
  * ------------------------------------------------------------------------ */
 
 @theme {
-  /* Libre Franklin for the interface: a Franklin Gothic descendant, which is
-   * the register US public-information design has used for a century. It is
-   * sober where a geometric sans would read as a product launch. */
-  --font-sans:
-    "Libre Franklin Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-
-  /* Source Serif 4 for the written pages. Methodology, the model card and
-   * provenance are long-form argument rather than UI, and a serif at a
-   * generous measure is read for minutes rather than scanned for seconds. */
-  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, "Times New Roman", serif;
-
+  /* -- Type --------------------------------------------------------------- */
+  /* Helvetica Bold, always caps, for anything a reader operates: nav,
+   * buttons, labels, card title bars. */
+  --font-sans: Helvetica, Arial, "Liberation Sans", "Nimbus Sans", ui-sans-serif, sans-serif;
+  /* Arial Black for page titles and section eyebrows only. */
+  --font-display: "Arial Black", "Arial Bold", Gadget, Helvetica, Arial, sans-serif;
+  /* Times for everything that is read rather than operated. Sans for UI and
+   * serif for body is the period's inversion of today's convention. */
+  --font-serif: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", serif;
   /* JetBrains Mono for H3 indices, SHA prefixes and indicator ids. These are
    * strings a reader compares character by character or copies, which is what
    * a monospace is for. */
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
 
+  /* -- Catalog palette (DESIGN.md, Dell 1996) ------------------------------ */
+  /* Tailwind's palette has nothing near these muted, web-safe-era tints, so
+   * they are declared as palette entries here, in oklch so the contrast suite
+   * measures them exactly as it measures Tailwind's own. Converted from the
+   * hex values in DESIGN.md. */
+  --color-ink-950: oklch(0% 0 0); /* #000000 frame, hairlines, text */
+  --color-dellred-500: oklch(59.7% 0.23 25.9); /* #e91d2a */
+  --color-sticker-400: oklch(84.3% 0.171 86.4); /* #fcc20f */
+  --color-mosaic-700: oklch(42.9% 0.297 264.1); /* #0000ee, the Netscape 3 link */
+  --color-olive96-500: oklch(61.8% 0.119 107.1); /* #8e8a25 */
+  --color-sage-300: oklch(78% 0.056 119.1); /* #b3bd95 */
+  --color-salmon-400: oklch(68.2% 0.116 20.5); /* #d77a7a */
+  --color-peach-400: oklch(73.4% 0.123 51.3); /* #e6915d */
+  --color-celery-200: oklch(84.3% 0.064 127.2); /* #c0d4a7 */
+  --color-powder-300: oklch(76.1% 0.04 236.3); /* #9ab6c8 */
+  --color-steel-300: oklch(77.1% 0.024 225); /* #a5b8c0 */
+  --color-periwinkle-400: oklch(70.3% 0.104 274.8); /* #8c9ae0 */
+
   /* -- Surfaces ----------------------------------------------------------- */
   --color-background: var(--color-white);
   --color-card: var(--color-white);
-  --color-sunken: var(--color-slate-50);
+  /* A ribbon-card body: the panel inside a panel. */
+  --color-sunken: var(--color-sage-300);
+  /* The page frame and the top banner. */
+  --color-frame: var(--color-ink-950);
+  --color-on-frame: var(--color-white);
+  /* The current page's rule on the banner. */
+  --color-frame-accent: var(--color-sticker-400);
 
   /* -- Text --------------------------------------------------------------- */
-  /* Headings and anything a reader is meant to land on first. */
-  --color-foreground: var(--color-slate-900);
-  /* Body copy. Pure black on white at a long measure is harsher than it needs
-   * to be; slate-700 clears AA comfortably and is easier over paragraphs. */
-  --color-body: var(--color-slate-700);
+  /* Pure black, as the period had it: there was no near-black softening. */
+  --color-foreground: var(--color-ink-950);
+  --color-body: var(--color-ink-950);
   /* Labels, nav, secondary rows. */
-  --color-muted-foreground: var(--color-slate-600);
-  /* The quietest text that is still text. Nothing below this carries meaning:
-   * slate-400 measured 2.63:1 and the contrast suite's comment records why it
-   * was taken off anything readable. */
-  --color-faint: var(--color-slate-500);
+  --color-muted-foreground: var(--color-zinc-800);
+  /* The quietest text that is still text, held to AA on the sage panel. */
+  --color-faint: var(--color-zinc-700);
 
   /* -- Lines -------------------------------------------------------------- */
-  --color-border: var(--color-slate-200);
-  --color-border-strong: var(--color-slate-300);
-  /* An input's border identifies the control, so WCAG 1.4.11 applies to it and
-   * it is darker than a decorative rule by that much. */
-  --color-input: var(--color-slate-500);
+  /* Every rule is a 1px black hairline; that is the whole depth vocabulary. */
+  --color-border: var(--color-ink-950);
+  --color-border-strong: var(--color-ink-950);
+  --color-input: var(--color-ink-950);
 
   /* -- Accent ------------------------------------------------------------- */
-  /* Cool, because the map is warm. The ramp runs yellow to dark red, and an
-   * interface accent anywhere near that range competes with the data for the
-   * reader's eye. */
-  --color-link: var(--color-sky-800);
-  --color-ring: var(--color-sky-700);
-  --color-primary: var(--color-slate-900);
+  --color-link: var(--color-mosaic-700);
+  --color-ring: var(--color-mosaic-700);
+  --color-primary: var(--color-ink-950);
   --color-primary-foreground: var(--color-white);
-  --color-secondary: var(--color-slate-100);
-  --color-secondary-foreground: var(--color-slate-900);
-  --color-accent: var(--color-slate-100);
-  --color-accent-foreground: var(--color-slate-900);
-  --color-destructive: var(--color-rose-700);
+  --color-secondary: var(--color-steel-300);
+  --color-secondary-foreground: var(--color-ink-950);
+  --color-accent: var(--color-celery-200);
+  --color-accent-foreground: var(--color-ink-950);
+  --color-destructive: var(--color-dellred-500);
 
   /* -- Status, shared by the provenance page and the deployment banner ----- */
-  --color-ok-surface: var(--color-emerald-50);
-  --color-ok-foreground: var(--color-emerald-900);
-  --color-ok-border: var(--color-emerald-200);
-  --color-warn-surface: var(--color-amber-50);
-  --color-warn-foreground: var(--color-amber-900);
-  --color-warn-border: var(--color-amber-200);
-  --color-bad-surface: var(--color-rose-50);
-  --color-bad-foreground: var(--color-rose-900);
-  --color-bad-border: var(--color-rose-200);
+  /* Flat catalog blocks with black text and a black hairline, rather than
+   * pale tints with coloured text. Status is still never colour alone. */
+  --color-ok-surface: var(--color-celery-200);
+  --color-ok-foreground: var(--color-ink-950);
+  --color-ok-border: var(--color-ink-950);
+  --color-warn-surface: var(--color-sticker-400);
+  --color-warn-foreground: var(--color-ink-950);
+  --color-warn-border: var(--color-ink-950);
+  --color-bad-surface: var(--color-salmon-400);
+  --color-bad-foreground: var(--color-ink-950);
+  --color-bad-border: var(--color-ink-950);
   /* The draft notice is the one rule in the application drawn at 2px,
    * because it is the one notice that must survive being skimmed. */
-  --color-warn-border-strong: var(--color-amber-400);
+  --color-warn-border-strong: var(--color-ink-950);
   /* A citation chip is a link in a tint, so it reads as followable before
    * it is read as text. */
-  --color-citation-surface: var(--color-sky-50);
+  --color-citation-surface: var(--color-celery-200);
 
-  --radius: 0.5rem;
+  /* -- Shape -------------------------------------------------------------- */
+  /* Square corners everywhere except a true circle. */
+  --radius: 0;
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+
+  /* No soft elevation: a hard offset in frame ink, like a bevelled GIF. */
+  --shadow-2xs: 1px 1px 0 0 var(--color-ink-950);
+  --shadow-xs: 1px 1px 0 0 var(--color-ink-950);
+  --shadow-sm: 2px 2px 0 0 var(--color-ink-950);
+  --shadow-md: 2px 2px 0 0 var(--color-ink-950);
+  --shadow-lg: 3px 3px 0 0 var(--color-ink-950);
+  --shadow-xl: 4px 4px 0 0 var(--color-ink-950);
+  --shadow-2xl: 4px 4px 0 0 var(--color-ink-950);
 }
 
 @layer base {
@@ -134,12 +178,11 @@
   body {
     background-color: var(--color-background);
     color: var(--color-body);
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     /* Figures line up in a column wherever they appear. Scores, percentiles,
      * record counts and distances are all compared down a list, and
      * proportional digits make that comparison worse for no benefit. */
     font-variant-numeric: tabular-nums;
-    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
@@ -153,7 +196,6 @@
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
-    border-radius: 2px;
   }
 
   /* The map canvas takes focus programmatically when a search result selects a
@@ -163,17 +205,28 @@
     outline: none;
   }
 
+  /* Page and section titles in Arial Black caps; lower headings in
+   * Helvetica Bold. No tracking adjustments, as DESIGN.md has it. */
   h1,
   h2,
   h3,
   h4 {
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-weight: 600;
-    /* Display faces set at heading sizes need the tracking pulled in; the
-     * default spacing is tuned for body copy. */
-    letter-spacing: -0.014em;
+    font-weight: 700;
+    letter-spacing: 0;
     text-wrap: balance;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  a {
+    text-underline-offset: 2px;
   }
 
   /* Long-form copy wants its orphans handled; UI labels do not, and `pretty`
@@ -194,6 +247,26 @@
    * 45-to-75 band that typographic convention and WCAG 1.4.8 both land on. */
   .measure {
     max-width: 68ch;
+  }
+
+  /* The literal page frame: the viewport as a printed picture frame, 8px of
+   * frame ink on a desktop and less where every pixel is map. */
+  .page-frame {
+    border: 2px solid var(--color-frame);
+    @media (width >= 48rem) {
+      border-width: 4px;
+    }
+    @media (width >= 80rem) {
+      border-width: 8px;
+    }
+  }
+
+  /* Helvetica Bold caps for the parts of the page a reader operates. */
+  .ui-label {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0;
   }
 }
 

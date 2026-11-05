@@ -15,8 +15,8 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
     <footer
       className={
         compact
-          ? "border-t border-border bg-sunken px-4 py-1.5 sm:px-5"
-          : "border-t border-border bg-sunken px-5 py-4"
+          ? "border-t border-border bg-card px-4 py-1.5 sm:px-5"
+          : "border-t border-border bg-card px-5 py-4"
       }
     >
       <p

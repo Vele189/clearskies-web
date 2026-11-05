@@ -19,10 +19,10 @@ export default function Nav({ path }: { path: string }) {
             className={cn(
               // Tighter on a phone so all five fit across 390px rather than
               // the last one scrolling out of sight behind the edge.
-              "border-b-2 px-1.5 py-3 text-[0.8125rem] whitespace-nowrap transition-colors sm:px-2.5 sm:text-sm",
+              "ui-label border-b-4 px-1 py-3 text-[0.625rem] whitespace-nowrap text-on-frame transition-colors sm:px-2.5 sm:text-xs",
               current
-                ? "border-primary font-semibold text-foreground"
-                : "border-transparent text-muted-foreground hover:border-border-strong hover:text-foreground",
+                ? "border-frame-accent"
+                : "border-transparent hover:border-on-frame",
             )}
           >
             {page.label}

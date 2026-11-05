@@ -33,7 +33,7 @@ export function Prose({ children, className }: { children: ReactNode; className?
 export function PageTitle({ children, lede }: { children: ReactNode; lede?: ReactNode }) {
   return (
     <header className="mb-8 border-b border-border pb-6">
-      <h1 className="text-3xl leading-tight font-semibold text-balance sm:text-4xl">
+      <h1 className="text-3xl font-black text-balance sm:text-4xl">
         {children}
       </h1>
       {lede !== undefined && (
@@ -48,7 +48,7 @@ export function PageTitle({ children, lede }: { children: ReactNode; lede?: Reac
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-10">
-      <h2 className="mb-3 text-xl font-semibold">{title}</h2>
+      <h2 className="mb-3 text-xl font-black">{title}</h2>
       <Prose>{children}</Prose>
     </section>
   );
@@ -61,7 +61,7 @@ export function Section({ title, children }: { title: string; children: ReactNod
 export function Point({ label, children }: { label: string; children: ReactNode }) {
   return (
     <p>
-      <strong className="font-semibold text-foreground">{label}</strong> {children}
+      <strong className="font-bold text-foreground">{label}</strong> {children}
     </p>
   );
 }

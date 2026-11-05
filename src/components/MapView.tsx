@@ -316,7 +316,7 @@ export default function MapView({ onSelect }: Props) {
       {!ready && !blocked && (
         <div
           role="status"
-          className="absolute inset-0 z-20 flex items-center justify-center bg-slate-50 text-sm text-slate-500"
+          className="absolute inset-0 z-20 flex items-center justify-center bg-sunken font-sans text-sm font-bold text-foreground"
         >
           Loading map…
         </div>
@@ -325,10 +325,10 @@ export default function MapView({ onSelect }: Props) {
       {blocked && (
         <div
           role="alert"
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-slate-50 px-6 text-center"
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-sunken px-6 text-center"
         >
-          <p className="text-sm text-slate-700">{blocked}</p>
-          <p className="max-w-sm text-xs text-slate-500">
+          <p className="text-sm text-body">{blocked}</p>
+          <p className="max-w-sm text-xs text-muted-foreground">
             {contextLost
               ? "This usually happens when the browser is short of memory. Reloading the page " +
                 "normally fixes it."
@@ -340,7 +340,7 @@ export default function MapView({ onSelect }: Props) {
             onClick={() => {
               window.location.reload();
             }}
-            className="rounded border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-100"
+            className="ui-label border border-input bg-card px-4 py-1.5 text-xs text-foreground hover:bg-accent"
           >
             Reload
           </button>
@@ -350,7 +350,7 @@ export default function MapView({ onSelect }: Props) {
       {tileError && !blocked && (
         <div
           role="alert"
-          className="pointer-events-auto absolute top-2 right-14 z-10 max-w-xs rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 shadow-sm sm:top-3"
+          className="pointer-events-auto absolute top-2 right-14 z-10 max-w-xs border border-warn-border bg-warn-surface px-3 py-2 text-xs text-warn-foreground shadow-sm sm:top-3"
         >
           The pollution layer didn&apos;t load, so you&apos;re only seeing the background map.
           This is a loading problem. It doesn&apos;t mean there&apos;s no pollution.

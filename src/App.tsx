@@ -126,20 +126,22 @@ export default function App() {
   const full = isFullBleed(path);
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    // The page frame: the whole app sits inside a frame-ink border (DESIGN.md).
+    <div className="page-frame flex h-full flex-col bg-background">
       {/* First in the tab order and invisible until focused, which is the one
           way a keyboard reader gets past a nav on every single page. */}
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50
-                   focus:rounded-md focus:border focus:border-border-strong focus:bg-card
-                   focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground
-                   focus:shadow-lg"
+                   focus:border focus:border-border-strong focus:bg-card
+                   focus:px-3 focus:py-2 focus:font-sans focus:text-sm focus:font-bold
+                   focus:text-foreground focus:shadow-lg"
       >
         Skip to content
       </a>
 
-      <header className="border-b border-border bg-card">
+      {/* The black top banner. */}
+      <header className="border-b border-frame bg-frame text-on-frame">
         {/* items-end rather than baseline: the nav's active tab is marked with
             a rule along its own bottom edge, which only meets the header's
             border if the nav sits on it. */}
@@ -147,11 +149,13 @@ export default function App() {
           <div className="py-3">
             <Link
               to="/"
-              className="text-[1.0625rem] leading-tight font-semibold tracking-tight text-foreground"
+              className="font-display text-xl leading-none font-black text-on-frame uppercase"
             >
               ClearSkies
             </Link>
-            <p className="mt-0.5 text-xs leading-tight text-faint">{coverage(health)}</p>
+            <p className="mt-1 font-sans text-xs leading-tight font-bold text-on-frame">
+              {coverage(health)}
+            </p>
           </div>
           <Nav path={path} />
         </div>
