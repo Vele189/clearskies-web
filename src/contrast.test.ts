@@ -33,8 +33,11 @@ import {
 
 const require = createRequire(import.meta.url);
 const THEME = readFileSync(require.resolve("tailwindcss/theme.css"), "utf8");
-const PALETTE = parsePalette(THEME);
-const ALIASES = parseSemanticAliases(readFileSync("src/index.css", "utf8"));
+const INDEX = readFileSync("src/index.css", "utf8");
+// Tailwind's palette plus the catalog palette `index.css` declares for the
+// Dell 1996 look (DESIGN.md), both written as oklch and parsed the same way.
+const PALETTE = { ...parsePalette(THEME), ...parsePalette(INDEX) };
+const ALIASES = parseSemanticAliases(INDEX);
 
 const WHITE: Oklch = { l: 1, c: 0, h: 0 };
 
@@ -72,6 +75,8 @@ const BODY_TEXT: [string, string, string][] = [
   // Inverted and tinted surfaces.
   ["primary-foreground", "primary", "the default button"],
   ["secondary-foreground", "secondary", "the default badge"],
+  ["on-frame", "frame", "the masthead and nav on the black banner"],
+  ["accent-foreground", "accent", "a hovered ghost button"],
   // Status, shared by the provenance page, the banner and the draft notices.
   ["warn-foreground", "warn-surface", "degraded deployment, caveats, the draft notice"],
   ["ok-foreground", "ok-surface", "provenance: loaded"],
@@ -93,7 +98,9 @@ const LARGE_OR_UI: [string, string, string][] = [
   ["input", "card", "the search input, the checkbox, and every outlined button"],
   ["ring", "card", "the focus indicator, on every surface the app has"],
   ["ring", "sunken", "the focus indicator over a tinted panel"],
-  ["primary", "card", "a checked checkbox, and the current nav item's rule"],
+  ["primary", "card", "a checked checkbox"],
+  ["frame-accent", "frame", "the current nav item's rule on the banner"],
+  ["frame", "card", "the page frame and every hairline"],
   ["body", "secondary", "the indicator bar's fill against its track"],
 ];
 
@@ -111,6 +118,10 @@ describe("WCAG AA contrast", () => {
     // silently measure an empty palette.
     expect(Object.keys(PALETTE).length).toBeGreaterThan(200);
     expect(PALETTE["slate-700"]).toBeDefined();
+    // And the catalog palette from index.css, without which every catalog
+    // alias would throw rather than be measured.
+    expect(PALETTE["sage-300"]).toBeDefined();
+    expect(PALETTE["ink-950"]).toEqual({ l: 0, c: 0, h: 0 });
   });
 
   it("reads the theme's own aliases rather than a second copy of them", () => {
@@ -118,7 +129,7 @@ describe("WCAG AA contrast", () => {
     // assertion above throw rather than pass, but a *partial* one would not,
     // so the shape is checked outright.
     expect(Object.keys(ALIASES).length).toBeGreaterThan(15);
-    expect(ALIASES["body"]).toBe("slate-700");
+    expect(ALIASES["body"]).toBe("ink-950");
     expect(ALIASES["background"]).toBe("white");
   });
 

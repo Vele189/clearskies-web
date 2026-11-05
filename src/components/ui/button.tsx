@@ -5,21 +5,27 @@ import type * as React from "react";
 import { cn } from "@/lib/utils.ts";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md " +
-    "font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 " +
+  // DESIGN.md's buttons: Helvetica Bold caps, square, a 1px frame-ink edge.
+  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-none " +
+    "border font-sans font-bold uppercase transition-colors " +
+    "disabled:pointer-events-none disabled:opacity-50 " +
     "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-slate-700",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-slate-200",
-        outline: "border border-input bg-card text-foreground hover:bg-sunken",
-        ghost: "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-        link: "text-link underline underline-offset-4 hover:no-underline",
+        default: "border-primary bg-primary text-primary-foreground hover:bg-zinc-700",
+        secondary: "border-input bg-secondary text-secondary-foreground hover:bg-accent",
+        outline: "border-input bg-card text-foreground hover:bg-accent",
+        ghost:
+          "border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+        // The one button that is a link: Times, Mosaic blue, underlined.
+        link:
+          "border-transparent font-serif font-normal normal-case text-link underline " +
+          "underline-offset-2 hover:no-underline",
       },
       size: {
-        sm: "h-8 gap-1.5 px-2.5 text-xs",
-        default: "h-9 px-3.5 text-sm",
+        sm: "h-8 gap-1.5 px-2.5 text-[0.6875rem]",
+        default: "h-9 px-4 text-xs",
         lg: "h-10 px-5 text-sm",
         // 36px square. Below ~24px a target fails WCAG 2.5.8, and an icon-only
         // control is the one most likely to be sized to its glyph.

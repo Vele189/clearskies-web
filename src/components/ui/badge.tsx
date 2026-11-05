@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils.ts";
  *  so a reader who cannot separate amber from rose still reads "Failed".
  */
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium " +
+  "inline-flex w-fit shrink-0 items-center gap-1 rounded-none px-2 py-0.5 ui-label text-[0.6875rem] " +
     "whitespace-nowrap ring-1 ring-inset [&_svg]:size-3",
   {
     variants: {

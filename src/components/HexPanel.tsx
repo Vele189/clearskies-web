@@ -456,7 +456,7 @@ export default function HexPanel({
       <header className="sticky top-0 z-10 border-b border-border bg-card/95 px-5 py-4 backdrop-blur-sm">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className={cn("text-lg leading-snug font-semibold", !titled && "sr-only")}>
+            <h2 className={cn("text-lg leading-snug font-black", !titled && "sr-only")}>
               {placeName(hex)}
             </h2>
             {standalone && (

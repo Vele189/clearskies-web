@@ -6,21 +6,28 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      className={cn("rounded-lg border border-border bg-card", className)}
+      className={cn("rounded-none border border-border bg-card", className)}
       {...props}
     />
   );
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="card-header" className={cn("px-5 pt-5", className)} {...props} />;
+  // A ribbon card's title bar: white, with a sharp frame-ink underline.
+  return (
+    <div
+      data-slot="card-header"
+      className={cn("border-b border-border px-4 py-2", className)}
+      {...props}
+    />
+  );
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
   return (
     <h3
       data-slot="card-title"
-      className={cn("text-base leading-snug font-semibold text-foreground", className)}
+      className={cn("ui-label text-sm leading-snug text-foreground", className)}
       {...props}
     />
   );

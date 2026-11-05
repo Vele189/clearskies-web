@@ -14,7 +14,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
       data-slot="table-container"
       tabIndex={0}
       role="group"
-      className="w-full overflow-x-auto rounded-lg border border-border"
+      className="w-full overflow-x-auto border border-border"
     >
       <table
         data-slot="table"
@@ -54,7 +54,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "px-4 py-2.5 text-left text-xs font-semibold tracking-wide text-muted-foreground uppercase",
+        "px-4 py-2.5 text-left ui-label text-xs text-foreground",
         className,
       )}
       {...props}

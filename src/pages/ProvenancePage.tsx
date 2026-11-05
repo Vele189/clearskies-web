@@ -104,7 +104,7 @@ function Source({ pull }: { pull: SourcePull }) {
         <p className="text-sm leading-relaxed text-body">{status.meaning}</p>
 
         {pull.known_gaps.length > 0 && (
-          <div className="mt-5 rounded-md border border-border bg-sunken px-4 py-3.5">
+          <div className="mt-5 border border-border bg-sunken px-4 py-3.5">
             <h4 className="text-sm font-semibold">What this source leaves out</h4>
             <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-body">
               {pull.known_gaps.map((gap, index) => (
@@ -213,7 +213,7 @@ export default function ProvenancePage() {
       </Section>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold">The sources</h2>
+        <h2 className="text-xl font-black">The sources</h2>
 
         {error !== null && (
           <p role="status" className="mt-3 text-sm text-body">
